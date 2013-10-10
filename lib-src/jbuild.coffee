@@ -10,10 +10,18 @@ require "shelljs/global"
 
 PROGRAM = path.basename(__filename).split(".")[0]
 
-Tasks = {}
+Tasks = null
+
+HelpTasks = ["help", "?", "-?", "-h", "--h", "--help"]
 
 #-------------------------------------------------------------------------------
 exports.main = main = (task, args...) ->
+
+    if not test("-f", "jbuild.js") and not test("-f", "jbuild.coffee")
+        if task in HelpTasks
+            help()
+        else
+            logError null, "jbuild.js not found in current dir; use `jbuild help` for help"
 
     # load the local jbuild module
     try 
@@ -22,6 +30,8 @@ exports.main = main = (task, args...) ->
         logError err,  "unable to load module jbuild: #{err}"
 
     # get tasks from the module
+    Tasks = {}
+
     for name, taskObj of jmod
         if !_.isFunction taskObj.run
             logError null, "the run property of task #{name} is not a function"
@@ -32,7 +42,10 @@ exports.main = main = (task, args...) ->
         Tasks[name] = taskObj
 
     # print help if no args, or arg is help, or unknown task
-    help() if !task? or task is "help" or !Tasks[task]?
+    help() if !task? or task in HelpTasks
+
+    if !Tasks[task]?
+        logError null, "unknown task '#{task}'; use `jbuild help` for help"
 
     # run the task
     try
@@ -44,7 +57,10 @@ exports.main = main = (task, args...) ->
 
 #-------------------------------------------------------------------------------
 log = (message) ->
-    console.log "#{PROGRAM}: #{message}"
+    if !message? or message is ""
+        console.log ""
+    else
+        console.log "#{PROGRAM}: #{message}"
     return
 
 #-------------------------------------------------------------------------------
@@ -67,6 +83,11 @@ help = ->
         appropriate args.
 
         The tasks should be exported from the jsbuild module.
+    """
+
+    process.exit 1 if !Tasks?
+
+    console.log """
 
         Available tasks from your jbuild module:
 

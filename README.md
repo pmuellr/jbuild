@@ -5,7 +5,7 @@ Another flavor of make, using node.
 
 Install globally via: (sudo not needed for windows)
 
-    sudo npm install https://github.com/pmuellr/jbuild
+    sudo npm install -g git://github.com/pmuellr/jbuild
 
 This will install a global command `jbuild`.
 
