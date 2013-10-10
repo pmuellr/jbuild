@@ -1,0 +1,34 @@
+{
+  "name":              "jbuild",
+  "main":              "lib/jbuild",
+  "bin":
+    {
+      "jbuild":        "bin/cli.js"
+    },
+  "description":       "a build tool in/for JavaScript",
+  "author":            "pmuellr",
+  "version":           "0.1.0",
+  "tags":              [ "build"],
+  "licenses":
+    [
+      {
+        "type":        "Apache License"
+      }
+    ],
+  "dependencies":
+    {
+      "underscore":       "1.5.x",
+      "coffee-script":    "1.6.x",
+      "shelljs":          "0.2.6"
+    },
+  "devDependencies":
+    {
+    },
+  "homepage":          "https://github.com/pmuellr/jbuild",
+  "bugs":              "https://github.com/pmuellr/jbuild/issues",
+  "repository": {
+    "type":            "git",
+    "url":             "git://github.com/pmuellr/jbuild"
+  }
+}
+
