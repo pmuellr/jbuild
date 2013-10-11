@@ -33,20 +33,24 @@ example
 
 contents of a `jbuild.coffee` file
 
-    exports.echo =
-        doc: "echo's it's arguments to stdout"
-        run: (args...) ->
-            echo args.join " "
+```coffee
+exports.echo =
+    doc: "echo's it's arguments to stdout"
+    run: (args...) ->
+        echo args.join " "
+```
 
 The JavaScript version, `jbuild.js`, would be this:
 
-    exports.echo = {
-        doc: "echo's it's arguments to stdout",
-        run: function() {
-            var args = [].slice.call(arguments)
-            return echo(args.join(" "));
-        }
+```js
+exports.echo = {
+    doc: "echo's it's arguments to stdout",
+    run: function() {
+        var args = [].slice.call(arguments)
+        return echo(args.join(" "));
     }
+}
+```
 
 When you invoke:
 
