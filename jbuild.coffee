@@ -1,26 +1,34 @@
 # Licensed under the Apache License. See footer for details.
 
 #-------------------------------------------------------------------------------
+# build file for use with jbuild - https://github.com/pmuellr/jbuild
+#-------------------------------------------------------------------------------
+
+src = "lib-src"
+out = "lib"
+
+#-------------------------------------------------------------------------------
+build = ->
+    src = "lib-src"
+    out = "lib"
+
+    echo "compiling #{src} to #{out}"
+    coffeec "--output #{out} #{src}/*.coffee"
+
+#-------------------------------------------------------------------------------
 exports.build =
     doc: "build the jbuild files"
-    run: ->
-        src = "lib-src/jbuild.coffee"
-        out = "lib"
-
-        echo "compiling #{src} to #{out}"
-        coffeec "--output lib lib-src/jbuild.coffee"
+    run: -> build()
 
 #-------------------------------------------------------------------------------
-exports.echo =
-    doc: "echo's it's arguments to stdout"
-    run: (args...) ->
-        echo args.join " "
-
-#-------------------------------------------------------------------------------
-exports.throwsError =
-    doc: "throws an error"
+exports.watch =
+    doc: "watch for source file changes, then rebuild"
     run: ->
-        throw new Error "all this task does is throw an error"
+        build()
+
+        watch
+            files: "#{src}/*.coffee"
+            run: -> build()
 
 #-------------------------------------------------------------------------------
 coffeec = (args) -> exec "node_modules/.bin/coffee --compile #{args}"

@@ -8,6 +8,8 @@ coffee = require "coffee-script"
 
 require "shelljs/global"
 
+global.watch = require "./watch"
+
 PROGRAM = path.basename(__filename).split(".")[0]
 
 Tasks = null
@@ -22,6 +24,27 @@ exports.main = main = (task, args...) ->
             help()
         else
             logError null, "jbuild.js not found in current dir; use `jbuild help` for help"
+
+    # compile the coffee file, to get syntax errrors
+    if test "-f", "jbuild.coffee"
+        code = cat "jbuild.coffee"
+
+        try
+            coffee.compile code, 
+                compile: true
+                output:  "jbuild.coffee.js"
+
+        catch err
+            iFile = "jbuild.coffee"
+            if err.location.first_line
+                iFile = "#{iFile}:#{err.location.first_line}"
+                if err.location.first_column
+                    iFile = "#{iFile}:#{err.location.first_column}"
+
+            logError null, "syntax error in #{iFile}: #{err}"
+
+        finally
+            rm "jbuild.coffee.js" if test "-f", "jbuild.coffee.js"
 
     # load the local jbuild module
     try 
@@ -56,7 +79,7 @@ exports.main = main = (task, args...) ->
     return
 
 #-------------------------------------------------------------------------------
-log = (message) ->
+global.log = (message) ->
     if !message? or message is ""
         console.log ""
     else
@@ -64,7 +87,7 @@ log = (message) ->
     return
 
 #-------------------------------------------------------------------------------
-logError = (err, message) ->
+global.logError = (err, message) ->
     log "error: #{message}"
 
     if err
