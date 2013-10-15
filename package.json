@@ -7,7 +7,7 @@
     },
   "description":       "a build tool in/for JavaScript",
   "author":            "pmuellr",
-  "version":           "0.1.1",
+  "version":           "0.1.2",
   "tags":              [ "build"],
   "licenses":
     [

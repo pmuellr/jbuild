@@ -4,6 +4,7 @@ fs   = require "fs"
 path = require "path"
 
 _      = require "underscore"
+pkg    = require "../package.json"
 coffee = require "coffee-script"
 
 require "shelljs/global"
@@ -104,6 +105,8 @@ global.logError = (err, message) ->
 #-------------------------------------------------------------------------------
 help = ->
     console.log """
+        #{PROGRAM} version #{pkg.version}
+        
         usage: #{PROGRAM} task arg arg arg ...
 
         Run a task from ./jbuild.js or ./jbuild.coffee, passing the
