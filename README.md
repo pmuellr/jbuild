@@ -60,3 +60,58 @@ you will see the following output:
 
     hello world
 
+
+additional global functions
+--------------------------------------------------------------------------------
+
+`log(message)`
+
+> will write `message` to the console, prefixed by the program name
+> prefix.  If you pass an empty string, an blank line will be printed
+
+`logError([err,] message)`
+
+> will write `message` to the console, prefixed by the program name
+> prefix.  If `err` is non-null, it will print the error's stack trace.
+> The function will then exit the program by calling `process.exit(1)`
+> The `err` parameter is optional.
+
+`watch(watchSpec)`
+
+> will watch the files specified in the `watchSpec` argument for 
+> changes, and when a change occurs, run the command specified in
+> the `watchSpec` argument.  Once the command has completed, the
+> files will be watched again, and when a change occurrs, run 
+> the command specified.  For ever.  For more information, see
+> the section on the `watch(watchSpec)` function.  You can run
+> the `watch()` function multiple times, to watch different files
+> and act upon them independently.
+
+
+`the watch(watchSpec) global function`
+--------------------------------------------------------------------------------
+
+The global `watch()` function takes a single argument `watchSpec`.
+`watchSpec` should be an object with two properties:
+
+* `files` - a wild-card enabled file specification of files to watch
+  for changes
+
+* `run` - a function which will be invoked when a file changes
+
+The `files` property must be a string or array of strings which
+can contain [minimatch](https://github.com/isaacs/minimatch)
+wildcards, which will be compared to all the files in the 
+current directory.  The comparison is against the path relative
+to the current directory, so the files arguments must not
+contain path entries above the current directory.  For example,
+you can't use `__filename` as an argument, as that variable
+is a fully qualified filename.  Use `path.basename(__filename)`
+instead.
+
+The `run` property is the function to run when a file changes.
+It will be passed the first file name that was noticed to
+have changed.  Once one file has been noticed to change, 
+the file watching is stopped, the command is run, and then
+file watching begins again.  Specifically, the `run` function
+will not be called for every file that changes.

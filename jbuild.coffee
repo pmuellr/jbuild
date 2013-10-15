@@ -4,6 +4,10 @@
 # build file for use with jbuild - https://github.com/pmuellr/jbuild
 #-------------------------------------------------------------------------------
 
+path = require "path"
+
+__basename = path.basename __filename
+
 src = "lib-src"
 out = "lib"
 
@@ -29,6 +33,12 @@ exports.watch =
         watch
             files: "#{src}/*.coffee"
             run: -> build()
+
+        watch
+            files: __basename
+            run: -> 
+                echo "file #{__basename} changed; exiting"
+                process.exit 0
 
 #-------------------------------------------------------------------------------
 coffeec = (args) -> exec "node_modules/.bin/coffee --compile #{args}"
