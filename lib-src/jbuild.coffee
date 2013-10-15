@@ -23,7 +23,7 @@ exports.main = main = (task, args...) ->
         if task in HelpTasks
             help()
         else
-            logError null, "jbuild.js not found in current dir; use `jbuild help` for help"
+            logError "error: jbuild.js not found in current dir; use `jbuild help` for help"
 
     # compile the coffee file, to get syntax errrors
     if test "-f", "jbuild.coffee"
@@ -41,7 +41,7 @@ exports.main = main = (task, args...) ->
                 if err.location.first_column
                     iFile = "#{iFile}:#{err.location.first_column}"
 
-            logError null, "syntax error in #{iFile}: #{err}"
+            logError "error: syntax error in #{iFile}: #{err}"
 
         finally
             rm "jbuild.coffee.js" if test "-f", "jbuild.coffee.js"
@@ -50,14 +50,14 @@ exports.main = main = (task, args...) ->
     try 
         jmod = require "#{path.join process.cwd(), 'jbuild'}"
     catch err
-        logError err,  "unable to load module jbuild: #{err}"
+        logError err,  "error: unable to load module ./jbuild: #{err}"
 
     # get tasks from the module
     Tasks = {}
 
     for name, taskObj of jmod
         if !_.isFunction taskObj.run
-            logError null, "the run property of task #{name} is not a function"
+            logError "error: the run property of task #{name} is not a function"
 
         taskObj.name  = name
         taskObj.doc  ?= "???"
@@ -68,7 +68,7 @@ exports.main = main = (task, args...) ->
     help() if !task? or task in HelpTasks
 
     if !Tasks[task]?
-        logError null, "unknown task '#{task}'; use `jbuild help` for help"
+        logError "error: unknown task '#{task}'; use `jbuild help` for help"
 
     # run the task
     try
@@ -88,9 +88,13 @@ global.log = (message) ->
 
 #-------------------------------------------------------------------------------
 global.logError = (err, message) ->
-    log "error: #{message}"
+    if err? and !message?
+        message = err
+        err     = null
 
-    if err
+    log message
+
+    if err and err.stack
         console.log "stack:" 
         console.log err.stack
 

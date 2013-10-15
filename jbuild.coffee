@@ -6,34 +6,44 @@
 
 path = require "path"
 
+# base name of this file, for watch()
 __basename = path.basename __filename
 
+# source and output directories
 src = "lib-src"
 out = "lib"
 
 #-------------------------------------------------------------------------------
-build = ->
-    src = "lib-src"
-    out = "lib"
+# perform a build
+#-------------------------------------------------------------------------------
 
+build = ->
     echo "compiling #{src} to #{out}"
     coffeec "--output #{out} #{src}/*.coffee"
 
 #-------------------------------------------------------------------------------
+# build task, just runs a build
+#-------------------------------------------------------------------------------
+
 exports.build =
     doc: "build the jbuild files"
     run: -> build()
 
 #-------------------------------------------------------------------------------
+# watch task: run a build, then watch for changes to this file, and sources
+#-------------------------------------------------------------------------------
+
 exports.watch =
     doc: "watch for source file changes, then rebuild"
     run: ->
         build()
 
+        # watch for changes to sources, run a build
         watch
             files: "#{src}/*.coffee"
             run: -> build()
 
+        # watch for changes to this file, then exit
         watch
             files: __basename
             run: -> 
@@ -41,6 +51,9 @@ exports.watch =
                 process.exit 0
 
 #-------------------------------------------------------------------------------
+# command to compile coffee files
+#-------------------------------------------------------------------------------
+
 coffeec = (args) -> exec "node_modules/.bin/coffee --compile #{args}"
 
 #-------------------------------------------------------------------------------
