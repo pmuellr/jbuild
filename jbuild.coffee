@@ -18,7 +18,7 @@ out = "lib"
 #-------------------------------------------------------------------------------
 
 build = ->
-    echo "compiling #{src} to #{out}"
+    log "compiling #{src} to #{out}"
     coffeec "--output #{out} #{src}/*.coffee"
 
 #-------------------------------------------------------------------------------
@@ -64,8 +64,8 @@ exports.watchServer =
         mkdir "-p", "tmp"
         "test file".to watFile
 
-        echo "watching file for changes: #{watFile}"
-        echo "when changed, run dummy server; iow, `touch #{watFile}`"
+        log "watching file for changes: #{watFile}"
+        log "when changed, restart dummy server; iow, `touch #{watFile}`"
         serverStart()
 
         watch

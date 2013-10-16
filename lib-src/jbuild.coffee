@@ -19,6 +19,11 @@ Tasks = null
 HelpTasks = ["help", "?", "-?", "-h", "--h", "--help"]
 
 #-------------------------------------------------------------------------------
+exports.execMain = ->
+    exec "node #{__filename} #{(process.argv.slice 2).join ' '}"
+    process.exit 0
+
+#-------------------------------------------------------------------------------
 exports.main = main = (task, args...) ->
 
     if not test("-f", "jbuild.js") and not test("-f", "jbuild.coffee")

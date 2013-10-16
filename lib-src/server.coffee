@@ -6,7 +6,6 @@ server = exports
 
 #-------------------------------------------------------------------------------
 server.start = (pidFile, program, args, options={}) ->
-    log "server.start(#{pidFile}, #{program}, [#{args.join ','}]"
     server.kill pidFile, ->
 
         options.stdio ?= "inherit"

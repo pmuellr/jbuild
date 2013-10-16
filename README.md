@@ -28,6 +28,10 @@ The shelljs package (<https://github.com/arturadib/shelljs>) is installed
 example, in the example below, the "echo" function is used, which is one of the 
 shelljs global functions.
 
+A handful of additional "global" functions are made available for your tasks,
+described below.
+
+
 example
 --------------------------------------------------------------------------------
 
@@ -47,7 +51,7 @@ exports.echo = {
     doc: "echo's it's arguments to stdout",
     run: function() {
         var args = [].slice.call(arguments)
-        return echo(args.join(" "));
+        echo(args.join(" "));
     }
 }
 ```
@@ -106,6 +110,7 @@ and respawning a program.
 will read the pid from `pidFile`, invoke `process.kill()` on it, and
 then call the `callback` on `process.nextTick()`.
 
+
 the `watch(watchSpec)` global function
 --------------------------------------------------------------------------------
 
@@ -133,3 +138,33 @@ have changed.  Once one file has been noticed to change,
 the file watching is stopped, the command is run, and then
 file watching begins again.  Specifically, the `run` function
 will not be called for every file that changes.
+
+
+using with Grunt
+--------------------------------------------------------------------------------
+
+You may not like the taste in your mouth of installing this package
+globally on your system.  At the same time, you may be quite happy with
+having [grunt](http://gruntjs.com/) installed globally on your system.
+
+Good news for you!
+
+You can install this module locally, and then instead of having a 
+*normal* `Gruntfile.coffee`, you can have one like this:
+
+```coffee
+jbuild = require "jbuild"
+jbuild.execMain()
+```
+
+The `execMain()` function in jbuild will spawn an invocation of the
+`jbuild` CLI, and then exit the current process.  This allows you to
+have a `jbuild.coffee` (or `jbuild.js`, but why?) file, and use `grunt`
+to invoke it, with jbuild installed locally in your project instead
+of globally.
+
+Of course, this does require you to have both grunt and jbuild installed
+locally in your project.
+
+Or you can just `require "jbuild"` in your *normal* `Gruntfile.coffee`, and
+make use of the global functions installed by shelljs and jbuild.
