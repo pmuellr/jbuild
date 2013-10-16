@@ -64,44 +64,49 @@ you will see the following output:
 additional global functions
 --------------------------------------------------------------------------------
 
-`log(message)`
+###`log(message)`
 
-> will write `message` to the console, prefixed by the program name
-> prefix.  If you pass an empty string, an blank line will be printed
+will write `message` to the console, prefixed by the program name
+prefix.  If you pass an empty string, an blank line will be printed
 
-`logError([err,] message)`
+###`logError([err,] message)`
 
-> will write `message` to the console, prefixed by the program name
-> prefix.  If `err` is non-null, it will print the error's stack trace.
-> The function will then exit the program by calling `process.exit(1)`
-> The `err` parameter is optional.
+will write `message` to the console, prefixed by the program name
+prefix.  If `err` is non-null, it will print the error's stack trace.
+The function will then exit the program by calling `process.exit(1)`.
 
-`watch(watchSpec)`
+The `err` parameter is optional.
 
-> will watch the files specified in the `watchSpec` argument for 
-> changes, and when a change occurs, run the command specified in
-> the `watchSpec` argument.  Once the command has completed, the
-> files will be watched again, and when a change occurrs, run 
-> the command specified.  For ever.  For more information, see
-> the section on the `watch(watchSpec)` function.  You can run
-> the `watch()` function multiple times, to watch different files
-> and act upon them independently.
+###`watch(watchSpec)`
 
-`server.start(pidFile, program, args[, options])`
+will watch the files specified in the `watchSpec` argument for 
+changes, and when a change occurs, run the command specified in
+the `watchSpec` argument.  Once the command has completed, the
+files will be watched again, and when a change occurrs, run 
+the command specified.  For ever.  
 
-> will start `program` with `child_process.spawn(program, args, options)`
-> and capture the pid for that process in `pidFile`.  It will also invoke
-> `server.kill(pidFile)` before spawning the program.  To be specific,
-> `server.kill()` is invoked with a callback which actually spawns the
-> program, to give the event queue a chance to breathe between killing
-> and respawning a program.
+For more information, see
+the section on the `watch(watchSpec)` function.  You can run
+the `watch()` function multiple times, to watch different files
+and act upon them independently.
 
-`server.kill(pidFile[, callback])`
+###`server.start(pidFile, program, args[, options])`
 
-> will read the pid from `pidFile`, invoke `process.kill()` on it, and
-> then call the `callback` on `process.nextTick()`.
+will create a new process with `child_process.spawn(program, args, options)`
+and capture the pid for that process in `pidFile`.  It will also invoke
+`server.kill(pidFile)` before spawning the program.  
 
-`the watch(watchSpec) global function`
+To be specific,
+`server.kill()` is invoked with a callback which actually spawns the
+program, to give the event queue a chance to breathe between killing
+and respawning a program.
+
+###`server.kill(pidFile[, callback])`
+
+will read the pid from `pidFile`, invoke `process.kill()` on it, and
+then call the `callback` on `process.nextTick()`.
+
+the `watch(watchSpec)` global function
 --------------------------------------------------------------------------------
 
 The global `watch()` function takes a single argument `watchSpec`.
