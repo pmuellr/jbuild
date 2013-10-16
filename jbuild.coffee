@@ -51,10 +51,51 @@ exports.watch =
                 process.exit 0
 
 #-------------------------------------------------------------------------------
+# watchServer task: test the server.* functions
+#-------------------------------------------------------------------------------
+
+pidFile = "tmp/server.pid"
+watFile = "tmp/test-file.txt"
+
+exports.watchServer =
+    doc: "test the server.* functions"
+    run: ->
+
+        mkdir "-p", "tmp"
+        "test file".to watFile
+
+        echo "watching file for changes: #{watFile}"
+        echo "when changed, run dummy server; iow, `touch #{watFile}`"
+        serverStart()
+
+        watch
+            files: watFile
+            run: ->
+                serverStart()
+
+#-------------------------------------------------------------------------------
+# function to start the dummy server
+#-------------------------------------------------------------------------------
+
+serverStart = ->
+    server.start pidFile, "node_modules/.bin/coffee", [__filename]
+
+#-------------------------------------------------------------------------------
 # command to compile coffee files
 #-------------------------------------------------------------------------------
 
 coffeec = (args) -> exec "node_modules/.bin/coffee --compile #{args}"
+
+#-------------------------------------------------------------------------------
+# invoked as a command, run a dummy 'server' for testing
+#-------------------------------------------------------------------------------
+
+if require.main is module 
+    require "shelljs/global"
+
+    echo "#{process.pid}: starting dummy server mode"
+
+    setInterval (-> echo "#{process.pid}: in dummy server mode"), 5 * 1000
 
 #-------------------------------------------------------------------------------
 # Copyright 2013 Patrick Mueller

@@ -87,6 +87,19 @@ additional global functions
 > the `watch()` function multiple times, to watch different files
 > and act upon them independently.
 
+`server.start(pidFile, program, args[, options])`
+
+> will start `program` with `child_process.spawn(program, args, options)`
+> and capture the pid for that process in `pidFile`.  It will also invoke
+> `server.kill(pidFile)` before spawning the program.  To be specific,
+> `server.kill()` is invoked with a callback which actually spawns the
+> program, to give the event queue a chance to breathe between killing
+> and respawning a program.
+
+`server.kill(pidFile[, callback])`
+
+> will read the pid from `pidFile`, invoke `process.kill()` on it, and
+> then call the `callback` on `process.nextTick()`.
 
 `the watch(watchSpec) global function`
 --------------------------------------------------------------------------------

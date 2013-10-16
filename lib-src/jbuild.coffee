@@ -9,7 +9,8 @@ coffee = require "coffee-script"
 
 require "shelljs/global"
 
-global.watch = require "./watch"
+global.watch  = require "./watch"
+global.server = require "./server"
 
 PROGRAM = path.basename(__filename).split(".")[0]
 
