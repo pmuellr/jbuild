@@ -110,6 +110,12 @@ and respawning a program.
 will read the pid from `pidFile`, invoke `process.kill()` on it, and
 then call the `callback` on `process.nextTick()`.
 
+###`pexec(command, options, callback)`
+
+will call [shelljs's `exec()` function](https://github.com/arturadib/shelljs#execcommand--options--callback)
+with `command` prefixed with `"node_modules/.bin"`, which allows you easily
+call binaries installed with npm package dependencies.
+
 
 the `watch(watchSpec)` global function
 --------------------------------------------------------------------------------

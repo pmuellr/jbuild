@@ -84,7 +84,7 @@ serverStart = ->
 # command to compile coffee files
 #-------------------------------------------------------------------------------
 
-coffeec = (args) -> exec "node_modules/.bin/coffee --compile #{args}"
+coffeec = (args) -> pexec "coffee --compile #{args}"
 
 #-------------------------------------------------------------------------------
 # invoked as a command, run a dummy 'server' for testing

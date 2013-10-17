@@ -86,6 +86,18 @@ exports.main = main = (task, args...) ->
     return
 
 #-------------------------------------------------------------------------------
+global.pexec = (command, options, callback) ->
+    if _.isFunction options and !callback?
+        callback = options
+        options  = {}
+
+    command   = "node #{path.join 'node_modules', '.bin', command}"
+    options  ?= {}
+    callback ?= ->
+
+    return exec command, options, callback
+
+#-------------------------------------------------------------------------------
 global.log = (message) ->
     if !message? or message is ""
         console.log ""
