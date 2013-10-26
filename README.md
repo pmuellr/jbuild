@@ -5,7 +5,7 @@ Another flavor of make, using node.
 
 Install globally via: (sudo not needed for windows)
 
-    sudo npm install -g git://github.com/pmuellr/jbuild
+    sudo npm install jbuild
 
 This will install a global command `jbuild`.
 
@@ -145,32 +145,3 @@ the file watching is stopped, the command is run, and then
 file watching begins again.  Specifically, the `run` function
 will not be called for every file that changes.
 
-
-using with Grunt
---------------------------------------------------------------------------------
-
-You may not like the taste in your mouth of installing this package
-globally on your system.  At the same time, you may be quite happy with
-having [grunt](http://gruntjs.com/) installed globally on your system.
-
-Good news for you!
-
-You can install this module locally, and then instead of having a 
-*normal* `Gruntfile.coffee`, you can have one like this:
-
-```coffee
-jbuild = require "jbuild"
-jbuild.execMain()
-```
-
-The `execMain()` function in jbuild will spawn an invocation of the
-`jbuild` CLI, and then exit the current process.  This allows you to
-have a `jbuild.coffee` (or `jbuild.js`, but why?) file, and use `grunt`
-to invoke it, with jbuild installed locally in your project instead
-of globally.
-
-Of course, this does require you to have both grunt and jbuild installed
-locally in your project.
-
-Or you can just `require "jbuild"` in your *normal* `Gruntfile.coffee`, and
-make use of the global functions installed by shelljs and jbuild.
