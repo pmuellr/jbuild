@@ -91,11 +91,14 @@ global.pexec = (command, options, callback) ->
         callback = options
         options  = {}
 
-    command   = "node #{path.join 'node_modules', '.bin', command}"
-    options  ?= {}
-    callback ?= ->
+    options ?= {}
 
-    return exec command, options, callback
+    command = "node #{path.join 'node_modules', '.bin', command}"
+
+    if _.isFunction callback
+        return exec command, options, callback
+    else
+        return exec command, options
 
 #-------------------------------------------------------------------------------
 global.log = (message) ->
