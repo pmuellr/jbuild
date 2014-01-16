@@ -133,6 +133,8 @@ global.logError = (err, message) ->
 #-------------------------------------------------------------------------------
 installNodeModuleScripts = ->
     nodeModulesBin = path.join "node_modules", ".bin"
+    return unless test "-d", nodeModulesBin
+
     scripts = ls nodeModulesBin
 
     for script in scripts
