@@ -53,6 +53,9 @@ exports.main = main = (task, args...) ->
         finally
             rm "jbuild.coffee.js" if test "-f", "jbuild.coffee.js"
 
+    # install node_module/.bin scripts
+    installNodeModuleScripts()
+
     # load the local jbuild module
     try
         jmod = require "#{path.join process.cwd(), 'jbuild'}"
@@ -126,6 +129,23 @@ global.logError = (err, message) ->
 
     process.exit 1
     return
+
+#-------------------------------------------------------------------------------
+installNodeModuleScripts = ->
+    nodeModulesBin = path.join "node_modules", ".bin"
+    scripts = ls nodeModulesBin
+
+    for script in scripts
+        global[script] = invokeNodeModuleScript nodeModulesBin, script
+
+#-------------------------------------------------------------------------------
+invokeNodeModuleScript = (scriptPath, script) ->
+    (commandArgs, execArgs...) ->
+        command = "node #{path.join scriptPath, script} #{commandArgs}"
+
+        execArgs.unshift command
+
+        exec.apply null, execArgs
 
 #-------------------------------------------------------------------------------
 help = ->

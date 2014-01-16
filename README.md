@@ -33,8 +33,19 @@ The shelljs package (<https://github.com/arturadib/shelljs>) is installed
 example, in the example below, the "echo" function is used, which is one of the
 shelljs global functions.
 
-A handful of additional "global" functions are made available for your tasks,
-described below.
+A handful of additional "global" functions are provided by jbuild,
+for your tasks, as described below.
+
+In addition, jbuild will define "global" functions for all the scripts in
+your `node_modules/.bin` directory.  The functions will be defined
+exactly like [shelljs's `exec()` function][1]. Some example invocations 
+for a script `node_modules/.bin/foop`, from CoffeeScript:
+
+    # run `foop` in with args "1 2 3", sync, output to stdout
+    foop "1 2 3"
+
+    # run `foop` in with args "4", async, capturing code and output when done
+    foop "4", silent:true, (code,output) -> console.log output
 
 
 example
@@ -117,7 +128,7 @@ then call the `callback` on `process.nextTick()`.
 
 ###`pexec(command, options, callback)`
 
-will call [shelljs's `exec()` function](https://github.com/arturadib/shelljs#execcommand--options--callback)
+will call [shelljs's `exec()` function][1]
 with `command` prefixed with `"node_modules/.bin"`, which allows you easily
 call binaries installed with npm package dependencies.
 
@@ -149,4 +160,8 @@ have changed.  Once one file has been noticed to change,
 the file watching is stopped, the command is run, and then
 file watching begins again.  Specifically, the `run` function
 will not be called for every file that changes.
+
+<!-- references -->
+
+[1]: https://github.com/arturadib/shelljs#execcommand--options--callback
 
