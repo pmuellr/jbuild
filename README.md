@@ -9,15 +9,20 @@ Install globally via: (sudo not needed for windows)
 
 This will install a global command `jbuild`.
 
-`jbuild` expects you to have a `jbuild.js` or `jbuild.coffee` node module 
-in the current directory.  The module should export a property for every 
+`jbuild` expects you to have a `jbuild.js` or `jbuild.coffee` node module
+in the current directory.  The module should export a property for every
 task you want to define for your build.  The property should be an object
 with two properties: `doc` which is a single line description of your task,
 and `run` which is the function to run when the task is invoked.
 
-When you run `jbuild` with no arguments, it will print some help as well
-as the tasks in your `jbuild` module, and the doc entries for those
-tasks.
+When you run `jbuild` with no arguments, it will do one of two things,
+depending on how many tasks are defined (exported) from your module.
+
+* When only one task is defined in a module, that task will be run.
+
+* Otherwise, some help will be printed, as well
+  as the tasks in your `jbuild` module, and the doc entries for those
+  tasks.
 
 To run a task in your `jbuild` module, invoke `jbuild` with that task as
 the first argument.  You can pass further arguments on the command line, and
@@ -25,7 +30,7 @@ they will be passed to the task's function.
 
 The shelljs package (<https://github.com/arturadib/shelljs>) is installed
 "globally", so that all the functions are available in your module.  For
-example, in the example below, the "echo" function is used, which is one of the 
+example, in the example below, the "echo" function is used, which is one of the
 shelljs global functions.
 
 A handful of additional "global" functions are made available for your tasks,
@@ -83,11 +88,11 @@ The `err` parameter is optional.
 
 ###`watch(watchSpec)`
 
-will watch the files specified in the `watchSpec` argument for 
+will watch the files specified in the `watchSpec` argument for
 changes, and when a change occurs, run the command specified in
 the `watchSpec` argument.  Once the command has completed, the
-files will be watched again, and when a change occurrs, run 
-the command specified.  For ever.  
+files will be watched again, and when a change occurrs, run
+the command specified.  For ever.
 
 For more information, see
 the section on the `watch(watchSpec)` function.  You can run
@@ -98,7 +103,7 @@ and act upon them independently.
 
 will create a new process with `child_process.spawn(program, args, options)`
 and capture the pid for that process in `pidFile`.  It will also invoke
-`server.kill(pidFile)` before spawning the program.  
+`server.kill(pidFile)` before spawning the program.
 
 To be specific,
 `server.kill()` is invoked with a callback which actually spawns the
@@ -130,7 +135,7 @@ The global `watch()` function takes a single argument `watchSpec`.
 
 The `files` property must be a string or array of strings which
 can contain [minimatch](https://github.com/isaacs/minimatch)
-wildcards, which will be compared to all the files in the 
+wildcards, which will be compared to all the files in the
 current directory.  The comparison is against the path relative
 to the current directory, so the files arguments must not
 contain path entries above the current directory.  For example,
@@ -140,7 +145,7 @@ instead.
 
 The `run` property is the function to run when a file changes.
 It will be passed the first file name that was noticed to
-have changed.  Once one file has been noticed to change, 
+have changed.  Once one file has been noticed to change,
 the file watching is stopped, the command is run, and then
 file watching begins again.  Specifically, the `run` function
 will not be called for every file that changes.

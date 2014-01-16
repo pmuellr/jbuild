@@ -37,7 +37,7 @@ exports.main = main = (task, args...) ->
         code = cat "jbuild.coffee"
 
         try
-            coffee.compile code, 
+            coffee.compile code,
                 compile: true
                 output:  "jbuild.coffee.js"
 
@@ -54,7 +54,7 @@ exports.main = main = (task, args...) ->
             rm "jbuild.coffee.js" if test "-f", "jbuild.coffee.js"
 
     # load the local jbuild module
-    try 
+    try
         jmod = require "#{path.join process.cwd(), 'jbuild'}"
     catch err
         logError err,  "error: unable to load module ./jbuild: #{err}"
@@ -70,6 +70,10 @@ exports.main = main = (task, args...) ->
         taskObj.doc  ?= "???"
 
         Tasks[name] = taskObj
+
+    # if no task arg, but there is one task defined, that's the one
+    taskNames = _.keys Tasks
+    task = Tasks[taskNames[0]].name if !task? and taskNames.length is 1
 
     # print help if no args, or arg is help, or unknown task
     help() if !task? or task in HelpTasks
@@ -117,7 +121,7 @@ global.logError = (err, message) ->
     log message
 
     if err and err.stack
-        console.log "stack:" 
+        console.log "stack:"
         console.log err.stack
 
     process.exit 1
@@ -127,7 +131,7 @@ global.logError = (err, message) ->
 help = ->
     console.log """
         #{PROGRAM} version #{pkg.version}
-        
+
         usage: #{PROGRAM} task arg arg arg ...
 
         Run a task from ./jbuild.js or ./jbuild.coffee, passing the
@@ -166,13 +170,13 @@ main.apply null, (process.argv.slice 2) if require.main is module
 
 #-------------------------------------------------------------------------------
 # Copyright 2013 Patrick Mueller
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
