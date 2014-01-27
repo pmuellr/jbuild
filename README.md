@@ -15,6 +15,9 @@ task you want to define for your build.  The property should be an object
 with two properties: `doc` which is a single line description of your task,
 and `run` which is the function to run when the task is invoked.
 
+You can also define tasks using the `defineTasks()` function described
+below.
+
 When you run `jbuild` with no arguments, it will do one of two things,
 depending on how many tasks are defined (exported) from your module.
 
@@ -38,7 +41,7 @@ for your tasks, as described below.
 
 In addition, jbuild will define "global" functions for all the scripts in
 your `node_modules/.bin` directory.  The functions will be defined
-exactly like [shelljs's `exec()` function][1]. Some example invocations 
+exactly like [shelljs's `exec()` function][1]. Some example invocations
 for a script `node_modules/.bin/foop`, from CoffeeScript:
 
     # run `foop` in with args "1 2 3", sync, output to stdout
@@ -105,10 +108,42 @@ the `watchSpec` argument.  Once the command has completed, the
 files will be watched again, and when a change occurrs, run
 the command specified.  For ever.
 
+`watchSpec` is an object with two properties: `files` which is a string or
+array of strings which should be file specifications, and `run` which is
+the function to run when one of those files changes.
+
 For more information, see
 the section on the `watch(watchSpec)` function.  You can run
 the `watch()` function multiple times, to watch different files
 and act upon them independently.
+
+###`watchFiles(watchFilesSpec)`
+
+will invoke the `watch()` function, but takes a slightly different object.
+
+`watch()` expects an object with two properties: `files` and `run`, where
+`files` is a string or array of strings, and `run` is a function.
+
+`watchFiles()` expects an object where the keys are the files to watch
+and the value associated with the key is the function to run.  The keys
+are space-separated lists of the same file specifications that the
+`watch()` function supports.
+
+This code using `watchFiles()`:
+
+    watchFiles
+        "src/*.coffee src/*.js" :-> build()
+        "out/*"                 :-> test()
+
+is exactly the same as this code using `watch()`:
+
+    watch
+        files: ["src/*.coffee", "src/*.js"]
+        run:   -> build()
+
+    watch
+        files: "out/*"
+        run:   -> test()
 
 ###`server.start(pidFile, program, args[, options])`
 
@@ -132,6 +167,45 @@ will call [shelljs's `exec()` function][1]
 with `command` prefixed with `"node_modules/.bin"`, which allows you easily
 call binaries installed with npm package dependencies.
 
+###`defineTasks(exports, tasksSpec)`
+
+provides an alternative to defining your tasks as objects exported from
+your module with `doc` and `run` properties.
+
+The `exports` argument should be the object which exports properties from
+your module.  Typically you'd just pass in the `exports` object provided
+to your module, but if you're making use of `module.exports`, you may
+need to pass that.
+
+The `tasksSpec` argument should be an object where the keys are the name
+of the tasks, and the values of those keys are what you would use in the
+`doc` property when defining tasks.
+
+The `defineTasks()` function will return an object which you should add
+the `run` functions to, using the same key that you used in the `tasksSpec`
+argument.
+
+This code using `defineTasks()`
+
+    tasks = defineTasks exports,
+        build:  "build the code"
+        test:   "test the code"
+
+    tasks.build = -> build()
+    tasks.test  = -> test()
+
+is exactly the same as this code defining the tasks as exports
+
+    exports.build =
+        doc: "build the code"
+        run: -> build()
+
+    exports.test =
+        doc: "test the code"
+        run: -> test()
+
+You can mix-and-match the two styles of defining tasks.  The `defineTasks()`
+function just adds tasks specifications to the exports object passed in.
 
 the `watch(watchSpec)` global function
 --------------------------------------------------------------------------------

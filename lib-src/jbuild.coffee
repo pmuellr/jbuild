@@ -95,6 +95,25 @@ exports.main = main = (task, args...) ->
     return
 
 #-------------------------------------------------------------------------------
+global.defineTasks = (exports_, tasksSpec) ->
+    tasks = {}
+
+    for name, doc of tasksSpec
+        run = getTaskRunner tasks, name
+        exports_[name] = {doc, run}
+
+    return tasks
+
+#-------------------------------------------------------------------------------
+getTaskRunner = (tasks, name) ->
+    (args) ->
+        run = tasks[name]
+        unless run?
+            logError "task run function for `#{name}` not defined in tasks object"
+
+        run.apply null, args
+
+#-------------------------------------------------------------------------------
 global.pexec = (command, options, callback) ->
     if _.isFunction options and !callback?
         callback = options

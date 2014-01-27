@@ -14,20 +14,16 @@ src = "lib-src"
 out = "lib"
 
 #-------------------------------------------------------------------------------
-# perform a build
+# perform a build, defined using defineTasks()
 #-------------------------------------------------------------------------------
 
-build = ->
+tasks = defineTasks exports,
+    build: "build the jbuild files"
+    wontWork: "this task doesn't work because it has no run function"
+
+tasks.build = ->
     log "compiling #{src} to #{out}"
     coffeec "--output #{out} #{src}/*.coffee"
-
-#-------------------------------------------------------------------------------
-# build task, just runs a build
-#-------------------------------------------------------------------------------
-
-exports.build =
-    doc: "build the jbuild files"
-    run: -> build()
 
 #-------------------------------------------------------------------------------
 # watch task: run a build, then watch for changes to this file, and sources
@@ -36,11 +32,11 @@ exports.build =
 exports.watch =
     doc: "watch for source file changes, then rebuild"
     run: ->
-        build()
+        tasks.build()
 
         # watch for changes to sources, run a build
         watchFiles
-            "lib-src/*.coffee" :-> build()
+            "lib-src/*.coffee" :-> tasks.build()
             "jbuild.coffee" :->
                 echo "file jbuild.coffee changed; exiting"
                 process.exit 0
