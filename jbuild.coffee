@@ -39,15 +39,10 @@ exports.watch =
         build()
 
         # watch for changes to sources, run a build
-        watch
-            files: "#{src}/*.coffee"
-            run: -> build()
-
-        # watch for changes to this file, then exit
-        watch
-            files: __basename
-            run: -> 
-                echo "file #{__basename} changed; exiting"
+        watchFiles
+            "lib-src/*.coffee" :-> build()
+            "jbuild.coffee" :->
+                echo "file jbuild.coffee changed; exiting"
                 process.exit 0
 
 #-------------------------------------------------------------------------------
@@ -90,7 +85,7 @@ coffeec = (args) -> pexec "coffee --compile #{args}"
 # invoked as a command, run a dummy 'server' for testing
 #-------------------------------------------------------------------------------
 
-if require.main is module 
+if require.main is module
     require "shelljs/global"
 
     echo "#{process.pid}: starting dummy server mode"
@@ -99,13 +94,13 @@ if require.main is module
 
 #-------------------------------------------------------------------------------
 # Copyright 2013 Patrick Mueller
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.

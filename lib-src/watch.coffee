@@ -7,7 +7,7 @@ _         = require "underscore"
 minimatch = require "minimatch"
 
 #-------------------------------------------------------------------------------
-module.exports = watch = ({files, run}) ->
+exports.watch = ({files, run}) ->
 
     files = [files] if _.isString files
 
@@ -18,6 +18,17 @@ module.exports = watch = ({files, run}) ->
         throw Error "watch() argument `run` must be a function"
 
     runWatch files, run
+
+#-------------------------------------------------------------------------------
+exports.watchFiles = (filesRunObject) ->
+
+    for files, run of filesRunObject
+        files = files.split "\s+"
+        files = _.reject files, (file) -> file is ""
+
+        exports.watch {files, run}
+
+    return
 
 #-------------------------------------------------------------------------------
 runWatch = (fileSpecs, run, fileName, watchers=[]) ->

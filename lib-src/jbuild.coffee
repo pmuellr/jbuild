@@ -4,13 +4,15 @@ fs   = require "fs"
 path = require "path"
 
 _      = require "underscore"
-pkg    = require "../package.json"
 coffee = require "coffee-script"
-
 require "shelljs/global"
 
-global.watch  = require "./watch"
-global.server = require "./server"
+pkg    = require "../package.json"
+watch  = require "./watch"
+
+global.watch       = watch.watch
+global.watchFiles  = watch.watchFiles
+global.server      = require "./server"
 
 PROGRAM = path.basename(__filename).split(".")[0]
 
