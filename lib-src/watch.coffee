@@ -23,7 +23,7 @@ exports.watch = ({files, run}) ->
 exports.watchFiles = (filesRunObject) ->
 
     for files, run of filesRunObject
-        files = files.split "\s+"
+        files = files.split /\s+/
         files = _.reject files, (file) -> file is ""
 
         exports.watch {files, run}
@@ -37,7 +37,7 @@ runWatch = (fileSpecs, run, fileName, watchers=[]) ->
 
     if fileName?
         log "----------------------------------------------------"
-        log "file changed: #{fileName} on #{new Date}" 
+        log "file changed: #{fileName} on #{new Date}"
 
     # remove old watchers, indicate the watchers already tripped
     if watchers.length
@@ -63,7 +63,7 @@ runWatch = (fileSpecs, run, fileName, watchers=[]) ->
     watchers = []
     watchers.tripped = false
 
-    options = 
+    options =
         persistent: true
         interval:   500
 
@@ -81,7 +81,7 @@ runWatch = (fileSpecs, run, fileName, watchers=[]) ->
 getFiles = (fileSpecs) ->
     allFiles = ls "-RA", "."
 
-    result = []    
+    result = []
     for fileSpec in fileSpecs
         for file in allFiles
             if minimatch file, fileSpec
@@ -100,13 +100,13 @@ getWatchHandler = (fileSpecs, run, watchFile, watchers) ->
 
 #-------------------------------------------------------------------------------
 # Copyright 2013 Patrick Mueller
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
