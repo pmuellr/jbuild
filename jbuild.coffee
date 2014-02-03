@@ -4,26 +4,32 @@
 # build file for use with jbuild - https://github.com/pmuellr/jbuild
 #-------------------------------------------------------------------------------
 
-path = require "path"
-
-# base name of this file, for watch()
-__basename = path.basename __filename
-
-# source and output directories
-src = "lib-src"
-out = "lib"
-
 #-------------------------------------------------------------------------------
 # perform a build, defined using defineTasks()
 #-------------------------------------------------------------------------------
 
 tasks = defineTasks exports,
-    build: "build the jbuild files"
-    wontWork: "this task doesn't work because it has no run function"
+    watch: "watch for source changes, then build, then test"
+    build: "build the package from source"
+    test:  "test the package"
 
+#-------------------------------------------------------------------------------
+tasks.watch = ->
+
+    watchFiles
+
+        "lib-src/*.coffee" :->
+            tasks.build()
+            tasks.test()
+
+        "jbuild.coffee" :->
+            echo "file jbuild.coffee changed; exiting"
+            process.exit 0
+
+#-------------------------------------------------------------------------------
 tasks.build = ->
-    log "compiling #{src} to #{out}"
-    coffeec "--output #{out} #{src}/*.coffee"
+    log "compiling source"
+    coffee "--compile --output lib lib-src/*.coffee"
 
 #-------------------------------------------------------------------------------
 # watch task: run a build, then watch for changes to this file, and sources
@@ -41,52 +47,6 @@ exports.watch =
                 echo "file jbuild.coffee changed; exiting"
                 process.exit 0
 
-#-------------------------------------------------------------------------------
-# watchServer task: test the server.* functions
-#-------------------------------------------------------------------------------
-
-pidFile = "tmp/server.pid"
-watFile = "tmp/test-file.txt"
-
-exports.watchServer =
-    doc: "test the server.* functions"
-    run: ->
-
-        mkdir "-p", "tmp"
-        "test file".to watFile
-
-        log "watching file for changes: #{watFile}"
-        log "when changed, restart dummy server; iow, `touch #{watFile}`"
-        serverStart()
-
-        watch
-            files: watFile
-            run: ->
-                serverStart()
-
-#-------------------------------------------------------------------------------
-# function to start the dummy server
-#-------------------------------------------------------------------------------
-
-serverStart = ->
-    server.start pidFile, "node_modules/.bin/coffee", [__filename]
-
-#-------------------------------------------------------------------------------
-# command to compile coffee files
-#-------------------------------------------------------------------------------
-
-coffeec = (args) -> pexec "coffee --compile #{args}"
-
-#-------------------------------------------------------------------------------
-# invoked as a command, run a dummy 'server' for testing
-#-------------------------------------------------------------------------------
-
-if require.main is module
-    require "shelljs/global"
-
-    echo "#{process.pid}: starting dummy server mode"
-
-    setInterval (-> echo "#{process.pid}: in dummy server mode"), 5 * 1000
 
 #-------------------------------------------------------------------------------
 # Copyright 2013 Patrick Mueller
