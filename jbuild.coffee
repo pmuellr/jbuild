@@ -18,12 +18,16 @@ out = "lib"
 #-------------------------------------------------------------------------------
 
 tasks = defineTasks exports,
-    build: "build the jbuild files"
+    build:    "build the jbuild files"
     wontWork: "this task doesn't work because it has no run function"
+    echo:     "echo the parameters to the console"
 
 tasks.build = ->
     log "compiling #{src} to #{out}"
     coffeec "--output #{out} #{src}/*.coffee"
+
+tasks.echo = (args...) ->
+    console.log.apply console, args
 
 #-------------------------------------------------------------------------------
 # watch task: run a build, then watch for changes to this file, and sources

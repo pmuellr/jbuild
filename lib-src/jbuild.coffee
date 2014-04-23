@@ -106,7 +106,7 @@ global.defineTasks = (exports_, tasksSpec) ->
 
 #-------------------------------------------------------------------------------
 getTaskRunner = (tasks, name) ->
-    (args) ->
+    (args...) ->
         run = tasks[name]
         unless run?
             logError "task run function for `#{name}` not defined in tasks object"
