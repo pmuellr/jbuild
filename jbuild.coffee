@@ -24,7 +24,7 @@ tasks = defineTasks exports,
 
 tasks.build = ->
     log "compiling #{src} to #{out}"
-    coffeec "--output #{out} #{src}/*.coffee"
+    coffeec "--output #{out} #{src}"
 
 tasks.echo = (args...) ->
     console.log.apply console, args

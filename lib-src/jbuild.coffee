@@ -121,7 +121,7 @@ global.pexec = (command, options, callback) ->
 
     options ?= {}
 
-    command = "node #{path.join 'node_modules', '.bin', command}"
+    command = "#{path.join 'node_modules', '.bin', command}"
 
     if _.isFunction callback
         return exec command, options, callback
@@ -164,7 +164,7 @@ installNodeModuleScripts = ->
 #-------------------------------------------------------------------------------
 invokeNodeModuleScript = (scriptPath, script) ->
     (commandArgs, execArgs...) ->
-        command = "node #{path.join scriptPath, script} #{commandArgs}"
+        command = "#{path.join scriptPath, script} #{commandArgs}"
 
         execArgs.unshift command
 
