@@ -7,7 +7,7 @@
     },
   "description":       "a build tool in/for JavaScript",
   "author":            "pmuellr",
-  "version":           "0.2.0",
+  "version":           "0.2.1",
   "tags":              [ "build"],
   "licenses":
     [
@@ -17,10 +17,10 @@
     ],
   "dependencies":
     {
-      "coffee-script":    "1.6.x",
-      "minimatch":        "0.2.x",
-      "shelljs":          "0.2.6",
-      "underscore":       "1.5.x"
+      "coffee-script":    "1.7.x",
+      "minimatch":        "0.3.x",
+      "shelljs":          "0.3.x",
+      "underscore":       "1.6.x"
     },
   "devDependencies":
     {
@@ -32,4 +32,3 @@
     "url":             "git://github.com/pmuellr/jbuild"
   }
 }
-

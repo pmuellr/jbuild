@@ -79,7 +79,7 @@ serverStart = ->
 # command to compile coffee files
 #-------------------------------------------------------------------------------
 
-coffeec = (args) -> pexec "coffee --compile #{args}"
+coffeec = (args) -> coffee "--compile #{args}"
 
 #-------------------------------------------------------------------------------
 # invoked as a command, run a dummy 'server' for testing

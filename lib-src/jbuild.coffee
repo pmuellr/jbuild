@@ -10,6 +10,8 @@ require "shelljs/global"
 pkg    = require "../package.json"
 watch  = require "./watch"
 
+coffee.register()
+
 global.watch       = watch.watch
 global.watchFiles  = watch.watchFiles
 global.server      = require "./server"
@@ -56,7 +58,7 @@ exports.main = main = (task, args...) ->
             rm "jbuild.coffee.js" if test "-f", "jbuild.coffee.js"
 
     # install node_module/.bin scripts
-    installNodeModuleScripts()
+    global.defineModuleFunctions "."
 
     # load the local jbuild module
     try
@@ -114,7 +116,19 @@ getTaskRunner = (tasks, name) ->
         run.apply null, args
 
 #-------------------------------------------------------------------------------
+global.defineModuleFunctions = (dir) ->
+    nodeModulesBin = path.join dir, "node_modules", ".bin"
+    return unless test "-d", nodeModulesBin
+
+    scripts = ls nodeModulesBin
+
+    for script in scripts
+        global[script] = invokeNodeModuleScript nodeModulesBin, script
+
+#-------------------------------------------------------------------------------
 global.pexec = (command, options, callback) ->
+    global.log "the `pexec()` function is deprecated"
+
     if _.isFunction options and !callback?
         callback = options
         options  = {}
@@ -150,16 +164,6 @@ global.logError = (err, message) ->
 
     process.exit 1
     return
-
-#-------------------------------------------------------------------------------
-installNodeModuleScripts = ->
-    nodeModulesBin = path.join "node_modules", ".bin"
-    return unless test "-d", nodeModulesBin
-
-    scripts = ls nodeModulesBin
-
-    for script in scripts
-        global[script] = invokeNodeModuleScript nodeModulesBin, script
 
 #-------------------------------------------------------------------------------
 invokeNodeModuleScript = (scriptPath, script) ->

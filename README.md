@@ -51,6 +51,7 @@ for a script `node_modules/.bin/foop`, from CoffeeScript:
     foop "4", silent:true, (code,output) -> console.log output
 
 
+
 example
 --------------------------------------------------------------------------------
 
@@ -84,15 +85,17 @@ you will see the following output:
     hello world
 
 
+
 additional global functions
 --------------------------------------------------------------------------------
 
-###`log(message)`
+### `log(message)`
 
 will write `message` to the console, prefixed by the program name
 prefix.  If you pass an empty string, an blank line will be printed
 
-###`logError([err,] message)`
+
+### `logError([err,] message)`
 
 will write `message` to the console, prefixed by the program name
 prefix.  If `err` is non-null, it will print the error's stack trace.
@@ -100,7 +103,8 @@ The function will then exit the program by calling `process.exit(1)`.
 
 The `err` parameter is optional.
 
-###`watch(watchSpec)`
+
+### `watch(watchSpec)`
 
 will watch the files specified in the `watchSpec` argument for
 changes, and when a change occurs, run the command specified in
@@ -117,7 +121,8 @@ the section on the `watch(watchSpec)` function.  You can run
 the `watch()` function multiple times, to watch different files
 and act upon them independently.
 
-###`watchFiles(watchFilesSpec)`
+
+### `watchFiles(watchFilesSpec)`
 
 will invoke the `watch()` function, but takes a slightly different object.
 
@@ -145,7 +150,8 @@ is exactly the same as this code using `watch()`:
         files: "out/*"
         run:   -> test()
 
-###`server.start(pidFile, program, args[, options])`
+
+### `server.start(pidFile, program, args[, options])`
 
 will create a new process with `child_process.spawn(program, args, options)`
 and capture the pid for that process in `pidFile`.  It will also invoke
@@ -156,18 +162,14 @@ To be specific,
 program, to give the event queue a chance to breathe between killing
 and respawning a program.
 
-###`server.kill(pidFile[, callback])`
+
+### `server.kill(pidFile[, callback])`
 
 will read the pid from `pidFile`, invoke `process.kill()` on it, and
 then call the `callback` on `process.nextTick()`.
 
-###`pexec(command, options, callback)`
 
-will call [shelljs's `exec()` function][1]
-with `command` prefixed with `"node_modules/.bin"`, which allows you easily
-call binaries installed with npm package dependencies.
-
-###`defineTasks(exports, tasksSpec)`
+### `defineTasks(exports, tasksSpec)`
 
 provides an alternative to defining your tasks as objects exported from
 your module with `doc` and `run` properties.
@@ -207,6 +209,14 @@ is exactly the same as this code defining the tasks as exports
 You can mix-and-match the two styles of defining tasks.  The `defineTasks()`
 function just adds tasks specifications to the exports object passed in.
 
+
+### `defineModuleFunctions(dir)`
+
+This function will add global functions for all the scripts in the
+directory `path.join(dir, "node_modules", ".bin")` in the same way as
+as they are added for your current directory automatically.  
+
+
 the `watch(watchSpec)` global function
 --------------------------------------------------------------------------------
 
@@ -238,4 +248,3 @@ will not be called for every file that changes.
 <!-- references -->
 
 [1]: https://github.com/arturadib/shelljs#execcommand--options--callback
-
