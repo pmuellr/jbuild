@@ -7,7 +7,7 @@
     },
   "description":       "a build tool in/for JavaScript",
   "author":            "pmuellr",
-  "version":           "0.2.1",
+  "version":           "1.0.0",
   "tags":              [ "build"],
   "licenses":
     [
@@ -17,10 +17,10 @@
     ],
   "dependencies":
     {
-      "coffee-script":    "1.7.x",
-      "minimatch":        "0.3.x",
+      "coffee-script":    "1.8.x",
+      "minimatch":        "1.0.x",
       "shelljs":          "0.3.x",
-      "underscore":       "1.6.x"
+      "underscore":       "1.7.x"
     },
   "devDependencies":
     {

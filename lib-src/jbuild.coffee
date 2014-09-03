@@ -118,12 +118,14 @@ getTaskRunner = (tasks, name) ->
 #-------------------------------------------------------------------------------
 global.defineModuleFunctions = (dir) ->
     nodeModulesBin = path.join dir, "node_modules", ".bin"
-    return unless test "-d", nodeModulesBin
 
-    scripts = ls nodeModulesBin
+    scripts = getNodeModulesScripts nodeModulesBin
 
     for script in scripts
-        global[script] = invokeNodeModuleScript nodeModulesBin, script
+        sanitizedName         = sanitizeFunctionName script
+        global[sanitizedName] = invokeNodeModuleScript nodeModulesBin, script
+
+    return
 
 #-------------------------------------------------------------------------------
 global.pexec = (command, options, callback) ->
@@ -167,12 +169,30 @@ global.logError = (err, message) ->
 
 #-------------------------------------------------------------------------------
 invokeNodeModuleScript = (scriptPath, script) ->
+    script = "#{script}.cmd" if (process.platform is "win32")
+
     (commandArgs, execArgs...) ->
         command = "#{path.join scriptPath, script} #{commandArgs}"
 
         execArgs.unshift command
 
         exec.apply null, execArgs
+
+#-------------------------------------------------------------------------------
+getNodeModulesScripts = (dir) ->
+    return [] unless test "-d", dir
+
+    result  = {}
+    scripts = ls dir
+    for script in scripts
+      name = script.split(".")[0]
+      result[name] = name
+
+    return _.keys result
+
+#-------------------------------------------------------------------------------
+sanitizeFunctionName = (scriptName) ->
+    return scriptName.replace(/[^\d\w_$]/g, "_")
 
 #-------------------------------------------------------------------------------
 help = ->

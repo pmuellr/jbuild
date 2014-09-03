@@ -50,6 +50,10 @@ for a script `node_modules/.bin/foop`, from CoffeeScript:
     # run `foop` in with args "4", async, capturing code and output when done
     foop "4", silent:true, (code,output) -> console.log output
 
+Scripts with names which contain characters not legal in a JavaScript identifier
+will be installed with names where those characters are replaced with the underscore
+character.  Eg,
+`cat-source-map` is available as the function `cat_source_map`.
 
 
 example
