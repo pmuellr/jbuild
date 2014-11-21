@@ -207,7 +207,7 @@ help = ->
         The tasks should be exported from the jsbuild module.
     """
 
-    process.exit 1 if !Tasks?
+    process.exit 0 if !Tasks?
 
     console.log """
 
@@ -224,7 +224,7 @@ help = ->
         doc  = task.doc
         console.log "   #{alignLeft name, maxTaskNameLen} - #{doc}"
 
-    process.exit 1
+    process.exit 0
 
 #-------------------------------------------------------------------------------
 alignLeft = (s, len) ->
