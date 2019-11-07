@@ -18,7 +18,7 @@
   "dependencies":
     {
       "coffee-script":    "1.8.x",
-      "minimatch":        "1.0.x",
+      "minimatch":        "3.0.x",
       "shelljs":          "0.3.x",
       "underscore":       "1.7.x"
     },
